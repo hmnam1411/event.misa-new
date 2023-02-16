@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+.text-center{
+    text-align: center;
+}
+
+*{
+    font-family: GoogleSans Bold, Arial, sans-serif;
+}
+
+a:-webkit-any-link{
+    text-decoration: none !important;
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_50662" data-name="Group 50662" transform="translate(-1068 -1133)">
+    <g id="ic_clock" transform="translate(1068 1133)">
+      <g id="Group_47499" data-name="Group 47499">
+        <path id="Path_35099" data-name="Path 35099" d="M0,24V0H24V24" fill="none"/>
+        <path id="Path_35100" data-name="Path 35100" d="M2,2H22V22H2Z" fill="none"/>
+        <path id="Path_35101" data-name="Path 35101" d="M2,2H22V22H2Z" fill="none"/>
+        <path id="Path_35102" data-name="Path 35102" d="M2,2H22V22H2Z" fill="none"/>
+        <path id="Path_35103" data-name="Path 35103" d="M2,2H22V22H2Z" fill="none"/>
+        <path id="Path_35104" data-name="Path 35104" d="M0,0H24V24H0Z" fill="none"/>
+        <path id="Path_35105" data-name="Path 35105" d="M12,4a8,8,0,1,1-8,8,8,8,0,0,1,8-8m0-2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Z" fill="#464646"/>
+        <path id="Path_35106" data-name="Path 35106" d="M12,7v5L9,15" fill="none" stroke="#464646" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+    </g>
+  </g>
+</svg>
