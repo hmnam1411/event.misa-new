@@ -18,7 +18,10 @@ export default {
   css: ['element-ui/lib/theme-chalk/index.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/element-ui'],
+  plugins: ['@/plugins/element-ui',
+    '@/plugins/slugify',
+    '~/plugins/repositories.js'
+  ],  
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -27,7 +30,19 @@ export default {
   buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: [
+    '@nuxt/content',
+  ],
+
+  modules: ['@nuxtjs/axios'],
+
+  axios: {
+
+  },
+
+  content: {
+    // https://content.nuxtjs.org/api/configuration
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

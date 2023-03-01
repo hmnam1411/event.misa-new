@@ -1,5 +1,5 @@
 const state = () => ({
-    upcommings: [
+    eventdata: [
         {
             id: 1,
             thumb: "images/home/event-1.jpg",
@@ -31,7 +31,7 @@ const state = () => ({
             name: "TOTAL REWARDS - TÁI TẠO HỆ THỐNG TỔNG ĐÃI NGỘ 2023 - CHÌA KHÓA TẠO CẠNH TRANH VÀ GIỮ CHÂN NHÂN TÀI | Công ty CP MISA & Link Power",
             organizer: "ltlong1" ,
             sumary: "Xin mời anh, chị đăng ký tham dự và giao lưu, hỏi đáp cùng diễn giả!",
-            time: "2023/02/07",
+            time: "2023/05/07",
             address: " Hà Nội",
             slot: "",
             cost: "",
@@ -55,7 +55,7 @@ const state = () => ({
             name: "TOTAL REWARDS - TÁI TẠO HỆ THỐNG TỔNG ĐÃI NGỘ 2023 - CHÌA KHÓA TẠO CẠNH TRANH VÀ GIỮ CHÂN NHÂN TÀI | Công ty CP MISA & Link Power",
             organizer: "ltlong1" ,
             sumary: "Xin mời anh, chị đăng ký tham dự và giao lưu, hỏi đáp cùng diễn giả!",
-            time: "2023/02/25",
+            time: "2023/08/25",
             address: " Hà Nội",
             slot: "",
             cost: "",
@@ -67,7 +67,7 @@ const state = () => ({
             name: "TOTAL REWARDS - TÁI TẠO HỆ THỐNG TỔNG ĐÃI NGỘ 2023 - CHÌA KHÓA TẠO CẠNH TRANH VÀ GIỮ CHÂN NHÂN TÀI | Công ty CP MISA & Link Power",
             organizer: "ltlong1" ,
             sumary: "Xin mời anh, chị đăng ký tham dự và giao lưu, hỏi đáp cùng diễn giả!",
-            time: "2023/02/25",
+            time: "2023/06/25",
             address: " Hà Nội",
             slot: "",
             cost: "",
@@ -79,7 +79,7 @@ const state = () => ({
             name: "TOTAL REWARDS - TÁI TẠO HỆ THỐNG TỔNG ĐÃI NGỘ 2023 - CHÌA KHÓA TẠO CẠNH TRANH VÀ GIỮ CHÂN NHÂN TÀI | Công ty CP MISA & Link Power",
             organizer: "ltlong1" ,
             sumary: "Xin mời anh, chị đăng ký tham dự và giao lưu, hỏi đáp cùng diễn giả!",
-            time: "2023/02/25",
+            time: "2023/02/01",
             address: " Hà Nội",
             slot: "",
             cost: "",
@@ -89,8 +89,8 @@ const state = () => ({
 });
 
 const getters = {
-    upcommingData : (state) => {
-        return state.upcommings
+    eventData : (state) => {
+        return state.eventdata
     }
 };
 

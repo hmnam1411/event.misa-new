@@ -1,79 +1,237 @@
 <template>
-  <div class="upcomming-event">
-    <div class="container">
-      <div class="row">
-        <h2 class="event-group-title text-center">Sắp diễn ra</h2>
-        <div
-          class="list-event-group"
-          v-for="(upcommingData, index) in upcommingData"
-          :key="index"
-        >
-          <div class="event-item">
-            <a class="event-item-thumb" href="">
-              <img :src="upcommingData.thumb" alt="Amis Event" />
-              <div class="event-item-topic">
-                {{ upcommingData.topic }}
-              </div>
-            </a>
-            <div class="event-item-content">
-              <div class="event-item-content-wrap">
-                <a href="">
-                  <h3 class="event-item-name">
-                    {{ upcommingData.name }}
-                  </h3>
-                </a>
-                <div class="event-item-sumary">
-                  Mời anh, chị đăng ký tham dự để nghe chia sẻ và hỏi đáp cùng
-                  Chủ tịch hội tư vấn thuế Việt Nam.
+  <div>
+    <!-- <FilterHome @inputData="filterEvent" /> -->
+    <div class="upcomming-event">
+      <div class="container">
+        <div class="row">
+          <div class="test" v-for="(item, index) in testData" :key="index">{{ item.name }}</div>
+          <!-- <h1> Test msg {{ msg }}</h1> -->
+          <h2 class="event-group-title text-center">Sắp diễn ra</h2>
+          <div class="list-event-group" v-for="(item, index) in tableData" :key="index">
+            <div class="event-item">
+              <nuxt-link :to="buildUrl(item)" class="event-item-thumb">
+                <img :src="item.thumb" alt="Amis Event" />
+                <div class="event-item-topic">
+                  {{ item.topic }}
+                </div>
+              </nuxt-link>
+              <div class="event-item-content">
+                <div class="event-item-content-wrap">
+                  <nuxt-link :to="buildUrl(item)" @click="handleClickItem(item)">
+                    <h3 class="event-item-name">
+                      {{ item.name }}
+                    </h3>
+                  </nuxt-link>
+                  <div class="event-item-sumary">
+                    {{ item.email }}
+                  </div>
+                </div>
+                <div class="cls-button-detail">
+                  <nuxt-link :to="buildUrl(item)" :title="item.name"> Xem chi tiết </nuxt-link>
                 </div>
               </div>
-              <div class="cls-button-detail">
-                <a href=""> Xem chi tiết </a>
-              </div>
-            </div>
-            <div class="event-item-info">
-              <div class="event-item-info-head">
-                <div class="event-item-time"> {{ upcommingData.time }} </div>
-                <div class="event-item-address">Zoom Online</div>
-                <div class="event-item-slot">500</div>
-                <div class="event-item-cost">Miễn phí</div>
-              </div>
-              <div class="cls-event-button">
-                <a class="btn-register" href="">Đăng ký ngay </a>
+              <div class="event-item-info">
+                <div class="event-item-info-head">
+                  <div class="event-item-time">{{ item.time }}</div>
+                  <div class="event-item-address">Zoom Online</div>
+                  <div class="event-item-slot">500</div>
+                  <div class="event-item-cost">Miễn phí</div>
+                </div>
+                <div class="cls-event-button">
+                  <nuxt-link :to="scrollRegister(item)" class="btn-register">Đăng ký ngay </nuxt-link>
+                </div>
               </div>
             </div>
           </div>
+          <el-pagination :page-size="pagin.pageSize" background :item="upcommingData" layout="prev, pager, next"
+            :total="this.upcommingData.length" @current-change="onPageChange">
+          </el-pagination>
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 
 <script>
-
-import { mapGetters } from "vuex";  
+import { mapGetters } from 'vuex';
+import FilterHome from './FilterHome.vue';
+import axios from 'axios'
+const myaxios = axios.create({
+  // ...
+})
+myaxios.interceptors.response.use(function (response) {
+  return response.data
+}, function (error) {
+  // ...
+})
+// import Paginate from 'vuejs-paginate'
 
 export default {
-  data: function () {
-    return {};
+  components: {
+    // Paginate
+    FilterHome
   },
+
+  data: function () {
+    return {
+      search: null,
+      tableData: [],
+      pageSize: 1,
+      pagin: {
+        page: 1,
+        pageSize: 3, // muốn bao nhiêu item/ trang sửa số này là tự ăn
+      },
+      timestamp: "",
+      getTimeD1: "",
+      getTimeD2: "",
+      testData: []
+    }
+  },
+
+  props: {
+    msg: String
+  },
+
+  async asyncData () {
+    const { data } = await axios.get(`https://jsonplaceholder.typicode.com/users`)
+    return { data }
+  },
+
+  created() {
+    setInterval(this.getNow, 1000);
+  },
+
+
+  // async fetch() {
+  //   this.tableData = await fetch(
+  //     "https://jsonplaceholder.typicode.com/users"
+  //   ).then(res => res.json());
+  // },
 
   computed: {
-    ...mapGetters("upcommingdata", {
-      upcommingData: "upcommingData",
+    ...mapGetters('upcommingdata', {
+      upcommingData: 'upcommingData',
     }),
+
+    
+
+    // searchResult() {
+    //   if (this.search) {
+    //     return this.users.filter((item) => {
+    //       return this.search
+    //         .toLowerCase()
+    //         .split(" ")
+    //         .every((v) => item.name.toLowerCase().includes(v));
+    //     });
+    //   } else {
+    //     return this.users;
+    //   }
+    // },
+
+    // filteredList() {
+    //   return this.upcommingData.filter(item => {
+    //     return item.title.toLowerCase().includes(this.search.toLowerCase())
+    //   })
+    // }
+
   },
 
+  methods: {
+    handleClickItem(item) {
+      console.log('item', item)
+    },
+
+    onPageChange(page) {
+      this.pagin.page = page
+      const startP = (page * this.pagin.pageSize) - this.pagin.pageSize
+      const endP = this.pagin.page * this.pagin.pageSize
+      // console.log("data",this.upcommingData.slice(3, 6), page, this.upcommingData.slice((page * 3) - 3,page + 2))
+      if (page == 1) {
+        this.tableData = this.upcommingData.slice(0, this.pagin.pageSize)
+      } else {
+        this.tableData = this.upcommingData.slice(startP, endP)
+      }
+      // (page * 3) - 3, page + 2
+      // this.current = upcommingData
+      console.log('hello page change', page);
+      console.log('tableData', this.tableData);
+      // console.log('total', this.upcommingData.length);
+    },
+
+    buildUrl(item) {
+      // console.log('slugify', `/detail/` + item.id + `/` + this.$slugify(item.name),)
+      return '/detail/' + item.id + `/` + this.$slugify(item.name)
+    },
+
+    scrollRegister(item) {
+      return '/detail/' + item.id + `/` + this.$slugify(item.name) + '#formReg'
+    },
+
+    getNow: function () {
+      const today = new Date();
+      const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      const dateTime = date + ' ' + time;
+      this.timestamp = dateTime;
+    },
+
+    formatDate(date) {
+      var dd = date.getDate();
+      var mm = date.getMonth() + 1; //January is 0!
+      var yyyy = date.getFullYear();
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+      //return dd + '/' + mm + '/' + yyyy;
+      return yyyy + '/' + mm + '/' + dd;
+
+    }
+
+  },
+
+  // async asyncData({ $axios }) {
+  //   const testDB = await $axios.$get(
+  //     `https://jsonplaceholder.typicode.com/users`
+  //   )
+  //   // return { this.tableData }
+  //   return { testDB }
+  // },
 
   mounted() {
-    console.log('data:', this.upcommingData);
+    // var nowDate = new Date()
+    // var arr = []
+    // console.log('1111', nowDate.toISOString().split('T')[0].split("-").reverse().join("/"))
+
+    // for (let i = 0; i < this.upcommingData.length; i++) {
+    //   if (this.upcommingData[i].time > nowDate.toISOString().split('T')[0].split("-").join("/")) {
+    //     console.log("delete")
+    //     arr.push(this.upcommingData[i])
+    //     // nothing
+    //   }
+    // }
+    // this.upcommingData = arr
+    // // console.log("arr", arr, this.upcommingData)
+    // this.tableData = arr.slice(0, 3)
+    this.tableData = this.upcommingData.slice(0, 3)
+    this.testData = this.data
+
+    console.log('upcoming', this.upcommingData);
   },
 
 
-};  
+
+}
 </script>
 
 <style scoped>
+.upcomming-event {
+  background: #f8f8f8;
+}
+
 .event-group-title {
   color: #000;
 }
@@ -154,8 +312,7 @@ export default {
   font-size: 14px;
   color: #212121;
   text-decoration: none !important;
-  background: url(~/assets/images/home/ic_arrow-right.svg) no-repeat right top
-    3px;
+  background: url(~/static/images/home/ic_arrow-right.svg) no-repeat right top 3px;
   background-size: 6px;
   padding-right: 14px;
 }
@@ -170,7 +327,7 @@ export default {
 }
 
 .event-item-time {
-  background: url(~/assets/images/home/ic_time.svg) no-repeat;
+  background: url(~/static/images/home/ic_time.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   margin-bottom: 8px;
@@ -179,7 +336,7 @@ export default {
 }
 
 .event-item-address {
-  background: url(~/assets/images/home/ic_address.svg) no-repeat;
+  background: url(~/static/images/home/ic_address.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   margin-bottom: 8px;
@@ -193,7 +350,7 @@ export default {
 }
 
 .event-item-slot {
-  background: url(~/assets/images/home/ic_slot.svg) no-repeat;
+  background: url(~/static/images/home/ic_slot.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   margin-bottom: 8px;
@@ -202,7 +359,7 @@ export default {
 }
 
 .event-item-cost {
-  background: url(~/assets/images/home/ic_cost.svg) no-repeat left top 2px;
+  background: url(~/static/images/home/ic_cost.svg) no-repeat left top 2px;
   background-size: 18px;
   padding-left: 25px;
   font-size: 16px;

@@ -2,78 +2,128 @@
   <div class="banner">
     <div class="container">
       <div class="row">
-        <div
+        <!-- <div
           class="banner-event-active"
-          v-for="(upcommingData, index) in upcommingData"
+          v-for="(item, index) in upcommingData"
           :key="index"
         >
           <div class="banner-organizational-unit">test</div>
           <div class="banner-event-name">test name</div>
           <div class="banner-event-info">
-            <div class="banner-event-time">{{ upcommingData.time }}</div>
+            <div class="banner-event-time">{{ item.time }}</div>
             <div class="banner-event-address">test address</div>
             <div class="banner-event-slot">500</div>
           </div>
-        </div>
+        </div> -->
 
-        <!-- <el-carousel :interval="5000" arrow="always" height="500px">
-          <el-carousel-item
-            v-for="(upcommingEvent, index) in upcommingEvent"
-            :key="index"
-          >
+        <el-carousel :interval="5000" arrow="always" height="500px">
+          <el-carousel-item class="banner-ctn" v-for="(item, index) in upcommingData" :key="index">
             <div class="banner-organizational-unit">CÔNG TY CP MISA</div>
-            <div class="banner-event-name">{{ upcommingEvent.name }}</div>
+            <div class="banner-event-name">{{ item.name }}</div>
             <div class="banner-event-info">
-              <div class="banner-event-time">{{ upcommingEvent.time }}</div>
+              <div class="banner-event-time">{{ item.time }}</div>
               <div class="banner-event-address">
-                {{ upcommingEvent.address }}
+                {{ item.address }}
               </div>
               <div class="banner-event-slot">500</div>
             </div>
             <ul class="event-slide">
               <li>
-                <a href="" id="Chitiet_Event" class="s-event-item">
+                <nuxt-link :to="buildUrl(item)" id="Chitiet_Event" class="s-event-item">
                   <div class="s-event-date">
                     <div class="s-event-month">Tháng 2</div>
                     <div class="s-event-day">21</div>
                   </div>
                   <div class="s-event-name">
-                    LẬP KẾ HOẠCH NHÂN SỰ ĐỂ VƯỢT QUA KHỦNG KHOẢNG - TRIẾT LÝ,
-                    PHƯƠNG PHÁP, CÔNG CỤ
+                    {{ item.name }}
                   </div>
-                </a>
+                </nuxt-link>
               </li>
             </ul>
-        </el-carousel-item>
-        </el-carousel> -->
-        
+          </el-carousel-item>
+        </el-carousel>
+        <!-- <div class="owl-nav">
+          <div class="btn-prev">
+            <img @click="handlePrev(item)" class="ic-prev" src="images/home/ic_back.svg">
+          </div>
+          <div class="btn-next">
+            <img @click="handleNext(item)" class="ic-next" src="images/home/ic_next.svg">
+
+          </div>
+        </div>        -->
       </div>
     </div>
   </div>
 </template>
 
+
+
 <script>
 import { mapGetters } from "vuex";
+import { mapActions } from 'vuex'
+
+
 export default {
   data: function () {
     return {};
   },
 
   mounted() {
-    console.log("data:", this.upcommingEvent);
+    // console.log("data:", this.upcommingEvent);
+    //  slugify('day la ha noi xin cua tao')
+    //  console.log('slugify', slugify(this.upcommingData.name));
+  },
+
+  methods: {
+    buildUrl(item) {
+      // console.log('slugify', `/detail/` + item.id + `/` + this.$slugify(item.name),)
+      return '/detail/' + item.id + `/` + this.$slugify(item.name)
+    },
+
+    ...mapActions('getevent', {
+      apiBannerList: 'apiBannerList',
+      apiGetEvent: 'apiGetEvent'
+    }),
+
+    handleBannerList() {
+      console.log('test api')
+      this.apiBannerList()
+        .then(res => {
+          console.log('res', res);
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+
+    // handleGetEvent() {
+    //   console.log('test api')
+    //   this.apiGetEvent()
+    //     .then(res => {
+    //       console.log('res', res);
+    //     }).catch(err => {
+    //       console.log(err)
+    //     })
+    // }
+
   },
 
   computed: {
     ...mapGetters("upcommingdata", {
       upcommingData: "upcommingData",
     }),
+
+  },
+
+  mounted() {
+    this.handleBannerList();
+    // this.handleGetEvent();
   },
 };
 </script>
 
 <style scoped>
 .banner {
-  background: url("~/assets/images/home/bg_banner.jpg");
+  background: url("~/static/images/home/bg_banner.jpg");
   background-size: cover;
   color: #fff;
   padding: 50px 0;
@@ -108,40 +158,40 @@ export default {
   flex-flow: row wrap;
 }
 
-.banner-event-info > div {
+.banner-event-info>div {
   font-family: GoogleSans Medium, Arial, sans-serif;
   font-size: 14px;
   padding-right: 30px;
 }
 
 .banner-event-time {
-  background: url(~/assets/images/home/ic_time.svg) no-repeat;
+  background: url(~/static/images/home/ic_time.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   filter: brightness(100);
 }
 
 .banner-event-address {
-  background: url(~/assets/images/home/ic_address.svg) no-repeat;
+  background: url(~/static/images/home/ic_address.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   filter: brightness(100);
 }
 
-.banner-event-info > div:last-child {
+.banner-event-info>div:last-child {
   padding-right: 0;
 }
 
 .banner-event-slot {
-  background: url(~/assets/images/home/ic_slot.svg) no-repeat;
+  background: url(~/static/images/home/ic_slot.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   filter: brightness(100);
 }
 
 /* #region ul li */
-ul.event-slide{
-    display: flex;
+ul.event-slide {
+  display: flex;
 }
 
 ul.event-slide li {
@@ -190,6 +240,10 @@ ul.event-slide li {
   -webkit-box-orient: vertical;
 }
 
+.banner-ctn {
+  margin-left: 12.5%;
+}
+
 /* #endregion */
 
 /* #region element ui */
@@ -203,3 +257,4 @@ ul.event-slide li {
 
 /* #endregion */
 </style>
+

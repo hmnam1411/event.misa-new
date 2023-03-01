@@ -8,60 +8,37 @@
         </h1>
         <div class="event-sort-box">
           <div class="box-sort">
-            <el-select
-              class="dropdown-topic"
-              v-model="topics.value"
-              placeholder="Chủ đề"
-            >
-              <el-option
-                class="dropdown-topic-item"
-                v-for="item in topics"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
+            <el-select class="dropdown-topic" v-model="topics.value" placeholder="Chủ đề">
+              <el-option class="dropdown-topic-item" v-for="item in topics" :key="item.value" :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
 
-            <el-select
-              class="dropdown-event-type"
-              v-model="events.value"
-              placeholder="Loại sự kiện"
-            >
-              <el-option
-                class="dropdown-event-item"
-                v-for="item in events"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
+            <el-select class="dropdown-event-type" v-model="events.value" placeholder="Loại sự kiện">
+              <el-option class="dropdown-event-item" v-for="item in events" :key="item.value" :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
 
             <div class="form-date">
-              <el-date-picker
-                v-model="startDate"
-                type="date"
-                placeholder="Ngày bắt đầu"
-              >
+              <el-date-picker v-model="startDate" type="date" placeholder="Ngày bắt đầu">
               </el-date-picker>
             </div>
           </div>
 
           <div class="box-search-wrap">
             <div class="box-search">
-              <el-input
-                prefix-icon="el-icon-search"
-                placeholder="Nhập tên sự kiện muốn tìm kiếm"
-                v-model="filter.search"
-                clearable
-              >
+              <!-- @change="$emit('customChange', $event.target.value)" -->
+              <el-input v-model="value" prefix-icon="el-icon-search" placeholder="Nhập tên sự kiện muốn tìm kiếm"
+                clearable>
               </el-input>
+              <!-- <input type="text" @change="$emit('customChange', $event.target.value)"> -->
+              <!-- <div v-for="(item, index) in filterSearch" :key="index">
+                <h1>{{ item.label }}</h1>
+              </div> -->
             </div>
             <div class="cls-button-search">
-              <el-button type="primary" icon="el-icon-search"
-                >Xem kết quả</el-button
-              >
+              <el-button @click="handleSearch()" type="primary" icon="el-icon-search">Xem kết quả</el-button>
             </div>
           </div>
         </div>
@@ -71,6 +48,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -112,19 +91,51 @@ export default {
         },
       ],
 
-      value: '',
       startDate: '',
-      filter: {
-        search: '',
-      },
+
+      debounceSearch: '',
+      value: ''
     }
+  },
+
+  // props: [ this.value ],
+  // setup(value, search){
+  //   search.emit('searchInput', value)
+  // },
+
+
+  computed: {
+    ...mapGetters('finishevents', {
+      finishEvents: 'finishEvents',
+    }),
+    
+    // filterSearch() {
+    //   return this.finishEvents.filter(item => {
+    //     return item.name.toLowerCase().includes(this.value.toLowerCase())
+    //   }) 
+      
+    // }
   },
 
   methods: {
     myDropdown() {
-      console.log('ngu')
       document.getElementById('myDropdown').classList.toggle('show')
     },
+
+    handleSearch(){
+        this.$emit('inputData', this.value);
+        this.value = '';
+        // this.$emit('testdata', this.handleSearch())
+    },
+  },
+
+  mounted () {
+    // this.debounceSearch = debounce((value, _this) => {
+    //   _this.filter.search = value
+    //   _this.$emit('filter', { ..._this.filter, search: trim(value) })
+    // }, 500);
+
+    // console.log('value',this.value);
   },
 }
 </script>
@@ -146,7 +157,7 @@ export default {
   display: flex !important;
 }
 
-.box-sort > div:not(:last-child) {
+.box-sort>div:not(:last-child) {
   padding-right: 15px;
 }
 

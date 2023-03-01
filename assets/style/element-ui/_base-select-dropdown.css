@@ -12,6 +12,18 @@
     color: #837f7f;
   }
 
-  /* .el-carousel__indicators--horizontal{
+  .el-carousel__indicators--horizontal{
     display: none !important;
-} */
+}
+
+.el-pagination{
+  text-align: center;
+  margin: 30px 0;
+}
+
+.el-carousel__arrow{
+  border: 1px solid;
+  height: 40px;
+  width: 40px;
+}
+

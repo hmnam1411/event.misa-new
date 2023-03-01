@@ -1,93 +1,118 @@
 <template>
-  <div class="finish-event">
-    <div class="container">
-      <div class="row">
-        <h2 class="event-group-title text-center">Đã diễn ra</h2>
-        <div class="list-event-group"  v-for="(finishItem, index) in finishItems" :key="index" >
-          <div class="event-item">
-            <a class="event-item-thumb" href="">
-              <img :src="finishItem.thumb" alt="Amis Event" />
-              <div class="event-item-topic">{{ finishItem.topic }}</div>
-            </a>
-            <div class="event-item-content">
-              <div class="event-item-content-wrap">
-                <a href="">
-                  <h3 class="event-item-name">
-                    {{ finishItem.name }}
-                  </h3>
-                </a>
-                <div class="event-item-sumary">
-                  Mời anh, chị đăng ký tham dự để nghe chia sẻ và hỏi đáp cùng
-                  Chủ tịch hội tư vấn thuế Việt Nam.
+  <div>
+    <!-- <FilterHome @customChange="logChange"/> -->
+    <div class="finish-event">
+      <div class="container">
+        <div class="row">
+          <h2 class="event-group-title text-center">Đã diễn ra</h2>
+          <div class="list-event-group" v-for="(item, index) in finishData" :key="index">
+            <div class="event-item">
+              <a class="event-item-thumb" href="">
+                <img :src="item.thumb" alt="Amis Event" />
+                <div class="event-item-topic">{{ item.topic }}</div>
+              </a>
+              <div class="event-item-content">
+                <div class="event-item-content-wrap">
+                  <nuxt-link :to="buildUrl(item)">
+                    <h3 class="event-item-name">
+                      {{ item.name }}
+                    </h3>
+                  </nuxt-link>
+                  <div class="event-item-sumary">
+                    Mời anh, chị đăng ký tham dự để nghe chia sẻ và hỏi đáp cùng
+                    Chủ tịch hội tư vấn thuế Việt Nam.
+                  </div>
+                </div>
+                <div class="cls-button-detail">
+                  <a href=""> Xem chi tiết </a>
                 </div>
               </div>
-              <div class="cls-button-detail">
-                <a href=""> Xem chi tiết </a>
+              <div class="event-item-info">
+                <div class="event-item-info-head">
+                  <div class="event-item-time">{{ item.time }}</div>
+                  <div class="event-item-address">Zoom Online</div>
+                  <div class="event-item-slot">500</div>
+                  <div class="event-item-cost">Miễn phí</div>
+                </div>
+  
               </div>
-            </div>
-            <div class="event-item-info">
-              <div class="event-item-info-head">
-                <div class="event-item-time">16/02/2023 - 14:30</div>
-                <div class="event-item-address">Zoom Online</div>
-                <div class="event-item-slot">500</div>
-                <div class="event-item-cost">Miễn phí</div>
-              </div>
-             
             </div>
           </div>
+          <el-pagination :page-size="pagin.pageSize" background :item="finishEvents" layout="prev, pager, next"
+            :total="this.finishEvents.length" @current-change="onPageChange">
+          </el-pagination>
         </div>
-        
       </div>
     </div>
   </div>
 </template>
     
 <script>
-    export default {
-        data: function(){
-            return{
-                finishItems: [
-                    {
-                        thumb: "images/home/event-1.jpg",
-                        topic: "Quản trị Tài chính - Kế toán",
-                        name: "LƯU Ý QUYẾT TOÁN THUẾ 2022 - HỎI ĐÁP CÙNG CHỦ TỊCH HỘI TƯ VẤN THUẾ VIỆT NAM | Công ty CP MISA",
-                        sumary: "",
-                        time: "",
-                        address: "",
-                        slot: "",
-                        cost: "",
-                    },
+import { mapGetters } from 'vuex'
+import FilterHome from './FilterHome.vue'
 
-                    {
-                        thumb: "images/home/event-1.jpg",
-                        content: "",
-                        name: "ĐÁNH GIÁ RỦI RO QUYẾT TOÁN THUẾ TNDN CUỐI NĂM - HƯỚNG DẪN  & GIẢI ĐÁP BỞI CHUYÊN GIA NGÀNH THUẾ | Công ty CP MISA",
-                        sumary: "",
-                        time: "",
-                        address: "",
-                        slot: "",
-                        cost: "",
-                    },
+export default {
+  components: {
+    FilterHome,
+  },
 
-                    {
-                        thumb: "images/home/event-1.jpg",
-                        content: "",
-                        name: "TOTAL REWARDS - TÁI TẠO HỆ THỐNG TỔNG ĐÃI NGỘ 2023 - CHÌA KHÓA TẠO CẠNH TRANH VÀ GIỮ CHÂN NHÂN TÀI | Công ty CP MISA & Link Power",
-                        sumary: "",
-                        time: "",
-                        address: "",
-                        slot: "",
-                        cost: "",
-                    }
-                ],
-
-                // finishItem: '',  
-            }
-        }
+  data: function () {
+    return {
+      finishData: [],
+      pageSize: 1,
+      pagin: {
+        page: 1,
+        pageSize: 3, // muốn bao nhiêu item/ trang sửa số này là tự ăn
+      },
     }
+  },
+
+  computed: {
+    ...mapGetters('finishevents', {
+      finishEvents: 'finishEvents',
+    }),
+    
+  },
+
+  methods: {
+    onPageChange(page) {
+      this.pagin.page = page
+      const startP = (page * this.pagin.pageSize) - this.pagin.pageSize
+      const endP = this.pagin.page * this.pagin.pageSize
+      // console.log("data",this.finishData.slice(3, 6), page, this.finishData.slice((page * 3) - 3,page + 2))
+      if (page == 1) {
+        this.finishData = this.finishEvents.slice(0, this.pagin.pageSize)
+      } else {
+        this.finishData = this.finishEvents.slice(startP, endP)
+      }
+      // (page * 3) - 3, page + 2
+      // this.current = finishData
+      console.log('hello page change', page);
+      console.log('finishData', this.finishData);
+      // console.log('total', this.finishData.length);
+    },
+
+    // slug url 
+    buildUrl(item) {
+      // console.log('slugify', `/detail/` + item.id + `/` + this.$slugify(item.name),)
+      return '/detail/' + item.id + `/` + this.$slugify(item.name)
+    },
+
+    logChange(event){
+      console.log(event);
+    }
+  },
+
+  mounted() {
+    this.finishData = this.finishEvents.slice(0, 3)
+    console.log('finish', this.finishData);;
+  },
+}
+
+
 </script>
     
-    <style scoped>
+<style scoped>
 .event-group-title {
   color: #000;
 }
@@ -168,8 +193,7 @@
   font-size: 14px;
   color: #212121;
   text-decoration: none !important;
-  background: url(~/assets/images/home/ic_arrow-right.svg) no-repeat right top
-    3px;
+  background: url(~/static/images/home/ic_arrow-right.svg) no-repeat right top 3px;
   background-size: 6px;
   padding-right: 14px;
 }
@@ -184,7 +208,7 @@
 }
 
 .event-item-time {
-  background: url(~/assets/images/home/ic_time.svg) no-repeat;
+  background: url(~/static/images/home/ic_time.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   margin-bottom: 8px;
@@ -193,7 +217,7 @@
 }
 
 .event-item-address {
-  background: url(~/assets/images/home/ic_address.svg) no-repeat;
+  background: url(~/static/images/home/ic_address.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   margin-bottom: 8px;
@@ -207,7 +231,7 @@
 }
 
 .event-item-slot {
-  background: url(~/assets/images/home/ic_slot.svg) no-repeat;
+  background: url(~/static/images/home/ic_slot.svg) no-repeat;
   background-size: 18px;
   padding-left: 25px;
   margin-bottom: 8px;
@@ -216,7 +240,7 @@
 }
 
 .event-item-cost {
-  background: url(~/assets/images/home/ic_cost.svg) no-repeat left top 2px;
+  background: url(~/static/images/home/ic_cost.svg) no-repeat left top 2px;
   background-size: 18px;
   padding-left: 25px;
   font-size: 16px;
