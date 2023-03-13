@@ -1,179 +1,180 @@
 <template>
   <div class="home-detail">
-    <div class="banner">
-      <img src="~/static/images/detail/banner.jpg" alt="Event Amis" />
-    </div>
-    <div class="event-detail section-temp">
-      <div class="event-detail-top container">
-        <div class="col-md-16 event-detail-text">
-          <div class="celendar">
-            <div class="celendar-month">Tháng {{  }}</div>
-            <div class="celendar-day">{{  }}</div>
-          </div>
-          <div class="event-celeb-unit">Công ty CP MISA</div>
-          <h1 class="event-name text-bold">
-            {{ arrupcomming.name }}
-          </h1>
-          <div class="organizer">
-            Diễn giả:
-            <span class="organizer-name text-bold"> {{ arrupcomming.organizer }} </span>
-          </div>
-          <div class="target-customer">
-            Đối tượng tham dự:
-            <span class="text-bold">
-              Chủ doanh nghiệp, CEO, Giám đốc tài chính, Kế toán trưởng, Kế toán
-              viên
-            </span>
-          </div>
-          <div class="short-intro">
-            <div class="intro-content">
-              Xin mời anh, chị đăng ký tham dự và giao lưu, hỏi đáp cùng diễn
-              giả!
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-7 event-detail-card">
-          <div class="ed-card-ctn">
-            <div id="Time">{{ arrupcomming.time }}</div>
-            <div id="Location">
-              {{ arrupcomming.address }}
-            </div>
-            <div id="Quantity">150</div>
-            <div id="noCost">Miễn phí</div>
-
-            <div id="Booking">
-              <a id="Dangky_DetailEvent" @click="toRegister()">
-                <span>Đăng ký ngay</span>
-              </a>
-            </div>
-          </div>
-        </div>
+    <div v-for="(item, index) in eventDetail" :key="index">
+      <div class="banner">
+        <img :src="item.Banner" alt="Event Amis" />
       </div>
-    </div>
-    <div class="content-benefit section-temp">
-      <div class="benefit-main container">
-        <div class="col-md-24">
-          <h2 class="common-title">
-            Nội dung hữu ích trong <span class="nowrap">sự kiện</span>
-          </h2>
-          <div class="cb-ctn">
-            <div>
-              <div>
-                <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
-              </div>
-              <div>
-                <div class="cb-name text-bold">1</div>
-                <div class="cb-content">
-                  Các sai sót doanh nghiệp có thể gặp phải khi quyết toán thuế
-                  2022
-                </div>
+      <div class="event-detail section-temp">
+        <div class="event-detail-top container">
+          <div class="col-md-16 event-detail-text">
+            <div class="celendar">
+              <div class="celendar-month">Tháng {{ }}</div>
+              <div class="celendar-day">{{ }}</div>
+            </div>
+            <div class="event-celeb-unit">Công ty CP MISA</div>
+            <h1 class="event-name text-bold">
+              {{ item.name }}
+            </h1>
+            <div class="organizer">
+              Diễn giả:
+              <span class="organizer-name text-bold"> {{ item.organizer }} </span>
+            </div>
+            <div class="target-customer">
+              Đối tượng tham dự:
+              <span class="text-bold">
+                Chủ doanh nghiệp, CEO, Giám đốc tài chính, Kế toán trưởng, Kế toán
+                viên
+              </span>
+            </div>
+            <div class="short-intro">
+              <div class="intro-content">
+                Xin mời anh, chị đăng ký tham dự và giao lưu, hỏi đáp cùng diễn
+                giả!
               </div>
             </div>
-
-            <div>
-              <div>
-                <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
+          </div>
+  
+          <div class="col-md-7 event-detail-card">
+            <div class="ed-card-ctn">
+              <div id="Time">{{ item.StartDate }}</div>
+              <div id="Location">
+                {{ item.Address }}
               </div>
-              <div>
-                <div class="cb-name text-bold">2</div>
-                <div class="cb-content">
-                  Lưu ý nào khi áp dụng các luật thuế để thực hiện kê khai quyết
-                  toán thuế 2022 dễ dàng?
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div>
-                <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
-              </div>
-              <div>
-                <div class="cb-name text-bold">3</div>
-                <div class="cb-content">
-                  Giải pháp gì để giảm thiểu sai sót và thực hiện quyết toán
-                  thuế nhanh chóng - chính xác?
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div>
-                <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
-              </div>
-              <div>
-                <div class="cb-name text-bold">4</div>
-                <div class="cb-content">
-                  Giải đáp cùng chuyên gia cao cấp về Thuế, tài chính kế toán
-                </div>
+              <div id="Quantity">150</div>
+              <div id="noCost">Miễn phí</div>
+  
+              <div id="Booking">
+                <a id="Dangky_DetailEvent" @click="toRegister()">
+                  <span>Đăng ký ngay</span>
+                </a>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="author section-temp">
-      <div class="author-main container">
-        <div class="col-md-24 common-title">Diễn giả</div>
-        <div class="col-md-24 speaker-wrap">
-          <div class="speaker-item">
-            <div class="author-img">
-              <img src="~/static/images/detail/author-1.png" />
-            </div>
-            <div class="author-info">
-              <div class="author-name">Ông Nguyễn Văn Thức</div>
-              <div class="author-position">
-                Giảng viên, chuyên gia cao cấp về Tài chính - Kế toán - Thuế
+      <div class="content-benefit section-temp">
+        <div class="benefit-main container">
+          <div class="col-md-24">
+            <h2 class="common-title">
+              Nội dung hữu ích trong <span class="nowrap">sự kiện</span>
+            </h2>
+            <div class="cb-ctn">
+              <div>
+                <div>
+                  <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
+                </div>
+                <div>
+                  <div class="cb-name text-bold">1</div>
+                  <div class="cb-content">
+                    Các sai sót doanh nghiệp có thể gặp phải khi quyết toán thuế
+                    2022
+                  </div>
+                </div>
               </div>
-              <div class="author-des">
-                - Thành viên Hội tư vấn Thuế Việt Nam<br />- Chuyên gia Tư vấn
-                Quản trị &amp; Phát triển Doanh nghiệp – Bộ Kế Hoạch &amp; Đầu
-                tư<br />- Chủ tịch HĐTV Công ty Fisa (Chuyên Dịch vụ Tư vấn Quản
-                trịTài chính, Kế toán<br />- Ông còn giữ nhiều vị trí quan trọng
-                như Giám đốc tài chính, Cố vấn tài chính, Kế toán trưởng, ...
-                trong nhiều đơn vị lớn như: Cty Quốc Việt (Cà Mau), Cty Y Dược
-                Viên Minh.<br />
+  
+              <div>
+                <div>
+                  <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
+                </div>
+                <div>
+                  <div class="cb-name text-bold">2</div>
+                  <div class="cb-content">
+                    Lưu ý nào khi áp dụng các luật thuế để thực hiện kê khai quyết
+                    toán thuế 2022 dễ dàng?
+                  </div>
+                </div>
+              </div>
+  
+              <div>
+                <div>
+                  <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
+                </div>
+                <div>
+                  <div class="cb-name text-bold">3</div>
+                  <div class="cb-content">
+                    Giải pháp gì để giảm thiểu sai sót và thực hiện quyết toán
+                    thuế nhanh chóng - chính xác?
+                  </div>
+                </div>
+              </div>
+  
+              <div>
+                <div>
+                  <img src="~/static/images/detail/ic-benefit-content-4.svg" alt="AMIS Event" />
+                </div>
+                <div>
+                  <div class="cb-name text-bold">4</div>
+                  <div class="cb-content">
+                    Giải đáp cùng chuyên gia cao cấp về Thuế, tài chính kế toán
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="author section-temp">
+        <div class="author-main container">
+          <div class="col-md-24 common-title">Diễn giả</div>
+          <div class="col-md-24 speaker-wrap">
+            <div class="speaker-item">
+              <div class="author-img">
+                <img src="~/static/images/detail/author-1.png" />
+              </div>
+              <div class="author-info">
+                <div class="author-name">Ông Nguyễn Văn Thức</div>
+                <div class="author-position">
+                  Giảng viên, chuyên gia cao cấp về Tài chính - Kế toán - Thuế
+                </div>
+                <div class="author-des">
+                  - Thành viên Hội tư vấn Thuế Việt Nam<br />- Chuyên gia Tư vấn
+                  Quản trị &amp; Phát triển Doanh nghiệp – Bộ Kế Hoạch &amp; Đầu
+                  tư<br />- Chủ tịch HĐTV Công ty Fisa (Chuyên Dịch vụ Tư vấn Quản
+                  trịTài chính, Kế toán<br />- Ông còn giữ nhiều vị trí quan trọng
+                  như Giám đốc tài chính, Cố vấn tài chính, Kế toán trưởng, ...
+                  trong nhiều đơn vị lớn như: Cty Quốc Việt (Cà Mau), Cty Y Dược
+                  Viên Minh.<br />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="flow-event section-temp">
+        <div class="flow-main container">
+          <div class="col-md-24">
+            <h2 class="common-title">Lịch trình</h2>
+            <div class="fe-ctn">
+              <div>
+                <div class="fe-name text-bold">08h00 - 08h30</div>
+                <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
+              </div>
+              <div>
+                <div class="fe-name text-bold">08h00 - 08h30</div>
+                <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
+              </div>
+              <div>
+                <div class="fe-name text-bold">08h00 - 08h30</div>
+                <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
+              </div>
+              <div>
+                <div class="fe-name text-bold">08h00 - 08h30</div>
+                <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
+              </div>
+              <div>
+                <div class="fe-name text-bold">08h00 - 08h30</div>
+                <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
+    <FormRegister :dataRegister="dataRegister"/>
 
-    <div class="flow-event section-temp">
-      <div class="flow-main container">
-        <div class="col-md-24">
-          <h2 class="common-title">Lịch trình</h2>
-          <div class="fe-ctn">
-            <div>
-              <div class="fe-name text-bold">08h00 - 08h30</div>
-              <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
-            </div>
-            <div>
-              <div class="fe-name text-bold">08h00 - 08h30</div>
-              <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
-            </div>
-            <div>
-              <div class="fe-name text-bold">08h00 - 08h30</div>
-              <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
-            </div>
-            <div>
-              <div class="fe-name text-bold">08h00 - 08h30</div>
-              <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
-            </div>
-            <div>
-              <div class="fe-name text-bold">08h00 - 08h30</div>
-              <div class="fe-content">Đón tiếp đại biểu, khách mời.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <FormRegister />
-    <SlideDetail />
-
-    <div id="formReg" class="social section-temp">
+    <div class="social section-temp">
       <div class="container">
         <div class="row">
           <div class="text-center common-title">
@@ -215,54 +216,42 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 import '~/assets/style/index.css'
 
-import FormRegister from '../../register/FormRegister.vue';
-import SlideDetail from '../../slide/SlideDetail.vue'
-import Footer from '../../footer/Footer.vue';
+import FormRegister from '../../../components/register/FormRegister.vue';
+import Footer from '../../../components/register/FormRegister.vue';
 
 export default {
-  data() {
-    return {
-      arrupcomming: {}
-    }
-  },
-
   components: {
     FormRegister,
-    SlideDetail,
     Footer
   },
 
-  computed: {
-    ...mapGetters('upcommingdata', {
-      upcommingData: 'upcommingData',
-    }),
+  data() {
+    return {
+      eventDetail: [],
+      dataRegister: '',
+    }
+  },
 
+  async fetch() {
+    const event = await fetch(
+      `http://127.0.0.1:8001/getEventByID/${this.$route.params.id}/`
+    ).then(res => res.json());
+
+    this.eventDetail = event.data
+    this.dataRegister = event.data[0].aiMarketingCode
   },
 
   methods: {
     toRegister() {
       const element = document.getElementById("RegisterForm");
-      element.scrollIntoView({ behavior:"smooth", block: "center", inline: "center"});
-    }
+      element.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+    },
+
   },
 
   mounted() {
-    // console.log('0', this.upcommingData);
-    // this.arrupcomming = ''
-    console.log('1', this.upcommingData.filter(i => i.id == this.$route.params.id))
-
-    // console.log('length', this.upcommingData.filter(i => i.id == this.$route.params.detailId).length)
-
-
-    if (this.upcommingData.filter(i => i.id == this.$route.params.id).length > 0) {
-      this.arrupcomming = this.upcommingData.filter(i => i.id == this.$route.params.id)[0]
-    }
-    console.log('this.arrupcomming', this.arrupcomming);
-    console.log('upcomming', this.upcommingData);
   },
 
 
@@ -416,7 +405,7 @@ div#Booking {
 
 @media (min-width: 768px) {
   .event-detail-top {
-    display: flex;
+    display: flex !important;
   }
 }
 
@@ -612,27 +601,29 @@ section.flow-event.section-temp {
 
 /* #region social */
 .missing-ctn {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
 }
 
 .missing-ctn>a {
-    display: block;
-    min-width: 280px;
-    color: #212121;
-    font-size: 18px;
-    padding: 30px;
-    border-radius: 30px;
+  display: block;
+  min-width: 280px;
+  color: #212121;
+  font-size: 18px;
+  padding: 30px;
+  border-radius: 30px;
 }
 
 .missing-title {
-    padding-top: 15px;
+  padding-top: 15px;
 }
 
-.missing-ctn>a:hover, .missing-ctn>a:focus, .missing-ctn>a:active {
-    text-decoration: none;
-    box-shadow: 0 5px 25px rgb(0 0 0 / 15%);
+.missing-ctn>a:hover,
+.missing-ctn>a:focus,
+.missing-ctn>a:active {
+  text-decoration: none;
+  box-shadow: 0 5px 25px rgb(0 0 0 / 15%);
 }
 
 /* #endregion */

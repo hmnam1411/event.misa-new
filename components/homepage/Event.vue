@@ -1,99 +1,70 @@
 <template>
     <div>
-        <!-- filter -->
-        <div class="filter-home">
-            <div class="container">
-                <div class="row">
-                    <h1 class="event-wrap-title">
-                        MISA không ngừng kết nối và chuyển giao giá trị hữu ích tới cộng đồng
-                        thông qua các sự kiện chất lượng
-                    </h1>
-                    <div class="event-sort-box">
-                        <div class="box-sort">
-                            <el-select class="dropdown-topic" v-model="topics.value" placeholder="Chủ đề">
-                                <el-option class="dropdown-topic-item" v-for="item in topics" :key="item.value"
-                                    :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
+        <Banner :getEvent="this.getEvent" />
 
-                            <el-select class="dropdown-event-type" v-model="events.value" placeholder="Loại sự kiện">
-                                <el-option class="dropdown-event-item" v-for="item in events" :key="item.value"
-                                    :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-
-                            <div class="form-date">
-                                <el-date-picker v-model="startDate" type="date" placeholder="Ngày bắt đầu">
-                                </el-date-picker>
-                            </div>
-                        </div>
-
-                        <div class="box-search-wrap">
-                            <div class="box-search">
-                                <!-- @change="$emit('customChange', $event.target.value)" -->
-                                <el-input v-model="value" prefix-icon="el-icon-search"
-                                    placeholder="Nhập tên sự kiện muốn tìm kiếm" clearable>
-                                </el-input>
-                                <!-- <input type="text" @change="$emit('customChange', $event.target.value)"> -->
-                                <!-- <div v-for="(item, index) in filterSearch" :key="index">
-                <h1>{{ item.label }}</h1>
-              </div> -->
-                            </div>
-                            <div class="cls-button-search">
-                                <el-button @click="handleSearch()" type="primary" icon="el-icon-search">Xem kết
-                                    quả</el-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="cls-button-search">
+            <el-button @click="handleDropDown()" type="primary" icon="el-icon-search">Xem kết
+                quả</el-button>
         </div>
-        <!-- end filter -->
+        <select name="category" id="category" v-model="selectedCategory">
+            <option v-for="(item, index) in itemCate" :key="index">
+                {{ item.name }}
+            </option>
+        </select>
+        <div v-for="(item, index) in categories" :key="index">
+            {{ item.name }}
+        </div>
+        <!-- <p>Selected Category: {{ selectedCategory }}</p> -->
+
+        <FilterHome @handle-topic="handleTopic" @value-topic="valueTopic" @select-label="updateLabel" :value="this.value"
+            :eventUpcoming="this.eventUpcoming" @value-search="updateValue" @handle-search="handleSearch" />
 
         <!-- upcoming -->
         <div class="upcomming-event">
             <div class="container">
                 <div class="row">
                     <h2 class="event-group-title text-center">Sắp diễn ra</h2>
-                    <div class="list-event-group" v-for="(item, index) in filterSearch" :key="index">
+                    <div class="list-event-group" v-for="(item, index) in eventUpcoming" :key="index">
+                        <div class="aimarketing-form-embed-code" v-html="item.aiMarketingCode"></div>
                         <div class="event-item">
-                            <nuxt-link :to="buildUrl(item)" class="event-item-thumb">
-                                <img :src="item.thumb" alt="Amis Event" />
+                            <a :href="buildUrl(item)" class="event-item-thumb">
+                                <img :src="item.Avatar" alt="Amis Event" />
                                 <div class="event-item-topic">
-                                    {{ item.topic }}
+                                    {{ item.Topic }}
                                 </div>
-                            </nuxt-link>
+                            </a>
                             <div class="event-item-content">
                                 <div class="event-item-content-wrap">
-                                    <nuxt-link :to="buildUrl(item)" @click="handleClickItem(item)">
+                                    <a :href="buildUrl(item)" @click="handleClickItem(item)">
                                         <h3 class="event-item-name">
-                                            {{ item.name }}
+                                            {{ item.EventName }}
                                         </h3>
-                                    </nuxt-link>
+                                    </a>
                                     <div class="event-item-sumary">
-                                        {{ item.email }}
+                                        {{ item.Summary }}
                                     </div>
                                 </div>
                                 <div class="cls-button-detail">
-                                    <nuxt-link :to="buildUrl(item)" :title="item.name"> Xem chi tiết </nuxt-link>
+                                    <a :href="buildUrl(item)" :title="item.name"> Xem chi tiết </a>
                                 </div>
                             </div>
                             <div class="event-item-info">
                                 <div class="event-item-info-head">
-                                    <div class="event-item-time">{{ item.time }}</div>
-                                    <div class="event-item-address">Zoom Online</div>
-                                    <div class="event-item-slot">500</div>
-                                    <div class="event-item-cost">Miễn phí</div>
+                                    <div class="event-item-time">{{ item.StartDate }}</div>
+                                    <div class="event-item-address">{{ item.Address }}</div>
+                                    <div class="event-item-slot">{{ item.Slot }}</div>
+                                    <div class="event-item-cost">{{ item.Cost }}</div>
                                 </div>
                                 <div class="cls-event-button">
-                                    <nuxt-link :to="scrollRegister(item)" class="btn-register">Đăng ký ngay </nuxt-link>
+                                    <a :href="scrollRegister(item)" class="btn-register">Đăng ký ngay </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <el-pagination :page-size="pagin.pageSize" background :item="eventUpcoming" layout="prev, pager, next"
-                        :total="this.eventUpcoming.length" @current-change="onPageChange">
+                    <el-pagination :page-size="pagin.pageSize" background :item="originUpcoming" layout="prev, pager, next"
+                        :total="this.originUpcoming.length" @current-change="onPageChangeUpcoming">
                     </el-pagination>
+
                 </div>
             </div>
         </div>
@@ -107,19 +78,18 @@
                     <div class="list-event-group" v-for="(item, index) in eventFinish" :key="index">
                         <div class="event-item">
                             <a class="event-item-thumb" href="">
-                                <img :src="item.thumb" alt="Amis Event" />
+                                <img :src="item.Avatar" alt="Amis Event" />
                                 <div class="event-item-topic">{{ item.topic }}</div>
                             </a>
                             <div class="event-item-content">
                                 <div class="event-item-content-wrap">
                                     <nuxt-link :to="buildUrl(item)">
                                         <h3 class="event-item-name">
-                                            {{ item.name }}
+                                            {{ item.EventName }}
                                         </h3>
                                     </nuxt-link>
                                     <div class="event-item-sumary">
-                                        Mời anh, chị đăng ký tham dự để nghe chia sẻ và hỏi đáp cùng
-                                        Chủ tịch hội tư vấn thuế Việt Nam.
+                                        {{ item.Summary }}
                                     </div>
                                 </div>
                                 <div class="cls-button-detail">
@@ -133,24 +103,27 @@
                                     <div class="event-item-slot">500</div>
                                     <div class="event-item-cost">Miễn phí</div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                    <el-pagination :page-size="pagin.pageSize" background :item="eventFinish" layout="prev, pager, next"
-                        :total="this.eventFinish.length" @current-change="onPageChange">
+                    <el-pagination :page-size="pagin.pageSize" background :item="originFinish" layout="prev, pager, next"
+                        :total="this.originFinish.length" @current-change="onPageChangeFinish">
                     </el-pagination>
                 </div>
             </div>
         </div>
         <!-- end finish -->
 
+
     </div>
 </template>
   
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
+
 import FilterHome from './FilterHome.vue';
+import Banner from './Banner.vue'
+
 import axios from 'axios'
 const myaxios = axios.create({
     // ...
@@ -160,210 +133,259 @@ myaxios.interceptors.response.use(function (response) {
 }, function (error) {
     // ...
 })
-// import Paginate from 'vuejs-paginate'
 
 export default {
     components: {
-        // Paginate
-        FilterHome
+        FilterHome,
+        Banner
     },
 
     data: function () {
         return {
+            upcomingUpdate: [],
             search: null,
             eventUpcoming: [],
             eventFinish: [],
-            pageSize: 1,
             pagin: {
                 page: 1,
                 pageSize: 3, // muốn bao nhiêu item/ trang sửa số này là tự ăn
             },
-            timestamp: "",
-            getTimeD1: "",
-            getTimeD2: "",
-            topics: [
-                {
-                    value: 'Option1',
-                    label: 'Chuyển đổi số',
-                },
-                {
-                    value: 'Option2',
-                    label: 'Quản trị Tài chính - Kế toán',
-                },
-                {
-                    value: 'Option3',
-                    label: 'Quản trị Nhân sự',
-                },
-                {
-                    value: 'Option4',
-                    label: 'Quản lý Marketing & Bán hàng',
-                },
-                {
-                    value: 'Option5',
-                    label: 'Quản trị & Vận hành',
-                },
-            ],
-
-            events: [
-                {
-                    value: 'Option1',
-                    label: 'Hội thảo',
-                },
-                {
-                    value: 'Option2',
-                    label: 'Đào tạo',
-                },
-                {
-                    value: 'Option3',
-                    label: 'Khác',
-                },
-            ],
 
             startDate: '',
+            value: '',
+            label: '',
+            topics: '',
+            getEvent: [],
 
-            debounceSearch: '',
-            value: ''
+            originUpcoming: [],
+
+            originFinish: [],
+
+            itemCate: [],
+
+            categories: [
+                { id: 0, category_id: 0, name: "Small" },
+                { id: 1, category_id: 0, name: "Medium" },
+                { id: 2, category_id: 0, name: "Large" },
+                { id: 3, category_id: 1, name: "Blue" },
+                { id: 4, category_id: 1, name: "Green" },
+                { id: 5, category_id: 1, name: "Red" }
+            ],
+
+            selectedCategory: '',
         }
-    },
-
-    props: {
-        msg: String
-    },
-
-    async asyncData() {
-        const { data } = await axios.get(`https://jsonplaceholder.typicode.com/users`)
-        return { data }
-    },
-
-    created() {
-        setInterval(this.getNow, 1000);
-    },
-
-
-    // async fetch() {
-    //   this.tableData = await fetch(
-    //     "https://jsonplaceholder.typicode.com/users"
-    //   ).then(res => res.json());
-    // },
-
-    computed: {
-        ...mapGetters('eventdata', {
-            eventData: 'eventData',
-        }),
-
-        filterSearch() {
-            return this.eventUpcoming.filter(item => {
-                return item.name.toLowerCase().includes(this.value.toLowerCase())
-            })
-
-        }
-
     },
 
     methods: {
-        myDropdown() {
-            document.getElementById('myDropdown').classList.toggle('show')
+        ...mapActions('getevent', {
+            apiGetAllEvent: 'apiGetAllEvent',
+        }),
+
+        handleDropDown() {
+            console.log('handle select: ', this.selectedCategory);
+            // let testdrop = this.categories.filter(item => {
+            //     return item.category_id == this.selectedCategory;
+            // });
+
+            // this.categories = this.topics.filter(function (el) {
+            //     return el.id == this.selectedCategory;
+            // }, this);
+
+            console.log('itemCate: ', this.itemCate);
         },
 
+        handleTopic() {
+            console.log('m ngu');
+        },
+
+        // 10/03/2023 HMNAM
+        // Filter search input when click button search
         handleSearch() {
-            this.$emit('inputData', this.value);
-            this.value = '';
-            // this.$emit('testdata', this.handleSearch())
+            // Topic dropdown filter
+            // console.log('handle select: ', this.topics.value);    
+            // this.eventUpcoming = this.originUpcoming.filter(function (el) {
+            //     console.log('el label', this.label);
+            //     return el.label == this.label;
+            // }, this);
+
+            // Input search
+            console.log('input: ', this.value);
+
+            if (this.value == '') {
+                this.eventUpcoming = this.originUpcoming
+                this.eventFinish = this.originFinish
+                console.log('if: ', this.eventUpcoming);
+            } else {
+                this.eventUpcoming = this.originUpcoming.filter(item => {
+                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+                })
+
+                this.eventFinish = this.originFinish.filter(item => {
+                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+                })
+            }
+
+
+        },
+
+        valueTopic(topics){
+            this.topics = topics
+        },
+
+        updateLabel(label) {
+            this.label = label
+        },
+
+        updateValue(value) {
+            this.value = value
+        },
+
+        handleSizeChange(val) {
+            console.log(`${val} items per page`);
+        },
+
+        handleCurrentChange(val) {
+            console.log(`current page: ${val}`);
+        },
+
+        myDropdown() {
+            document.getElementById('myDropdown').classList.toggle('show')
         },
 
         handleClickItem(item) {
             console.log('item', item)
         },
 
-        onPageChange(page) {
-            this.pagin.page = page
-            const startP = (page * this.pagin.pageSize) - this.pagin.pageSize
-            const endP = this.pagin.page * this.pagin.pageSize
-            // console.log("data",this.upcommingData.slice(3, 6), page, this.upcommingData.slice((page * 3) - 3,page + 2))
-            if (page == 1) {
-                this.eventUpcoming = this.eventUpcoming.slice(0, this.pagin.pageSize)
+        // Phân trang sự kiện sắp diễn ra
+        onPageChangeUpcoming(val) {
+            console.log(`current page: ${val}`);
+            // 09/03/2023 HMNAM 
+            // Phân trang event
+            let page = this.pagin.page
+            console.log('page: ', page);
+            let startP = (page * this.pagin.pageSize) - this.pagin.pageSize
+            let endP = this.pagin.page * this.pagin.pageSize
+            let itemSl = endP + 1
+            let valPage = val
+            // console.log('value: ', val);
+
+            if (val == 1) {
+                this.eventUpcoming = this.originUpcoming.slice(0, this.pagin.pageSize)
             } else {
-                this.eventUpcoming = this.eventUpcoming.slice(startP, endP)
+                this.eventUpcoming = this.originUpcoming.slice(endP, itemSl)
             }
-            // (page * 3) - 3, page + 2
-            // this.current = upcommingData
-            // console.log('hello page change', page);
-            // console.log('tableData', this.eventUpcoming);
-            // console.log('total', this.upcommingData.length);
+            // console.log('res', res.data);
+            // let slice = this.getEvent.slice(0, this.pagin.pageSize)
+            // console.log('page', this.pagin.page);
+            // console.log('slice: ', slice);
+            console.log('startP: ', startP);
+            console.log('endP: ', endP);
         },
 
+        // Phân trang sự kiện đã kết thúc
+        onPageChangeFinish(val) {
+            console.log(`current page: ${val}`);
+            // 09/03/2023 HMNAM 
+            // Phân trang event
+            let page = this.pagin.page
+            console.log('page: ', page);
+            let startP = (page * this.pagin.pageSize) - this.pagin.pageSize
+            let endP = this.pagin.page * this.pagin.pageSize
+            let itemSl = endP + 1
+            let valPage = val
+            // console.log('value: ', val);
+
+            if (val == 1) {
+                this.eventFinish = this.originFinish.slice(0, this.pagin.pageSize)
+            } else {
+                this.eventFinish = this.originFinish.slice(endP, itemSl)
+            }
+            // console.log('res', res.data);
+            // let slice = this.getEvent.slice(0, this.pagin.pageSize)
+            // console.log('page', this.pagin.page);
+            // console.log('slice: ', slice);
+            console.log('startP: ', startP);
+            console.log('endP: ', endP);
+        },
+
+        // HMNAM
+        // Router khi nhấn vào chi tiết 1 bài viết
         buildUrl(item) {
             // console.log('slugify', `/detail/` + item.id + `/` + this.$slugify(item.name),)
-            return '/detail/' + item.id + `/` + this.$slugify(item.name)
+            return '/detail/' + item.EventID + `/` + this.$slugify(item.EventName)
         },
 
         scrollRegister(item) {
-            return '/detail/' + item.id + `/` + this.$slugify(item.name) + '#formReg'
+            return '/detail/' + item.EventID + `/` + this.$slugify(item.EventName) + '#RegisterForm'
         },
 
-        getNow: function () {
-            const today = new Date();
-            const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-            const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-            const dateTime = date + ' ' + time;
-            this.timestamp = dateTime;
+
+        // HMNAM
+        // Call api hiển thị toàn bộ event
+        async getAllEvent() {
+            await this.apiGetAllEvent().then(res => {
+                this.getEvent = res.data
+
+                // 08/03/2023 HMNAM
+                // Check hiển thị bài viết theo thời gian
+                var date = new Date()
+                var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString()
+
+                for (let i = 0; i < this.getEvent.length; i++) {
+                    if (this.getEvent[i].StartDate > isoDateTime) {
+                        // console.log('upcoming: ', this.getEvent[i].EventID);
+                        this.eventUpcoming.push(this.getEvent[i])
+                        // nothing
+
+                    } else {
+                        this.eventFinish.push(this.getEvent[i])
+                        // console.log('finish: ', this.getEvent[i].EventID);
+                    }
+
+                    // HMNAM
+                    // Convert date time
+                    let dateT = new Date(this.getEvent[i].StartDate)
+                    let year = dateT.getFullYear();
+                    let month = dateT.getMonth();
+                    let dt = dateT.getDate();
+                    let hour = dateT.getHours();
+                    let minutes = dateT.getMinutes();
+
+                    if (dt < 10) {
+                        dt = '0' + dt;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    if (hour < 10) {
+                        hour = '0' + hour;
+                    }
+                    if (minutes < 10) {
+                        minutes = '0' + minutes;
+                    }
+
+                    this.getEvent[i].StartDate = dt + '/' + month + '/' + year + ' ' + '-' + ' ' + hour + ':' + minutes
+                    // console.log('ngu', this.getEvent[i].StartDate);
+                }
+
+                // Số item hiển thị trên trang chủ của event-upcoming/ event-finish 
+                this.eventUpcoming = this.eventUpcoming.slice(0, 3)
+                this.eventFinish = this.eventFinish.slice(0, 3)
+            })
+                .catch(err => {
+                    console.log(err);
+                })
         },
-
-        formatDate(date) {
-            var dd = date.getDate();
-            var mm = date.getMonth() + 1; //January is 0!
-            var yyyy = date.getFullYear();
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
-            //return dd + '/' + mm + '/' + yyyy;
-            return yyyy + '/' + mm + '/' + dd;
-
-        }
 
     },
-
     mounted() {
-        var nowDate = new Date()
-        var arrUp = []
-        var arrFinish = []
-        console.log('today is: ', nowDate.toISOString().split('T')[0].split("-").reverse().join("/"))
+        this.getAllEvent();
+        this.originUpcoming = this.eventUpcoming
+        this.originFinish = this.eventFinish
 
-        for (let i = 0; i < this.eventData.length; i++) {
-            if (this.eventData[i].time > nowDate.toISOString().split('T')[0].split("-").join("/")) {
-                console.log("keep", this.eventData[i].time)
-                arrUp.push(this.eventData[i]);
-                // nothing
-            }
-            else {
-                arrFinish.push(this.eventData[i])
-                console.log("delete", this.eventData[i].time)
-                // console.log('delete', arrFinish.push(this.eventData[i]));
-
-            }
-        }
-
-        this.eventUpcoming = arrUp
-        this.eventFinish = arrFinish
-
-        // this.eventUpcoming = arrUp.slice(0, 3)
-        // this.eventFinish = arrFinish.slice(0, 3)
-
-
-        // this.tableData = this.eventData.slice(0, 3)
-        // this.testData = this.data
-
-        // console.log('data', this.testData);
-        // console.log('upcoming', this.upcommingData);
-
-        console.log('page length', this.eventUpcoming);
+        this.itemCate = this.categories
+        // console.log('itemCate', this.itemCate);
     },
-
-
-
 }
 </script>
   
@@ -734,63 +756,63 @@ export default {
 
 /* region filter */
 .filter-home {
-  margin-top: 60px;
+    margin-top: 60px;
 }
 
 .event-wrap-title {
-  font-size: 22px;
-  text-align: center;
-  max-width: 620px;
-  float: none;
-  margin: 0 auto;
+    font-size: 22px;
+    text-align: center;
+    max-width: 620px;
+    float: none;
+    margin: 0 auto;
 }
 
 .box-sort {
-  display: flex !important;
+    display: flex !important;
 }
 
 .box-sort>div:not(:last-child) {
-  padding-right: 15px;
+    padding-right: 15px;
 }
 
 .event-sort-box {
-  padding: 30px;
+    padding: 30px;
 }
 
 .dropdown-topic {
-  width: 50% !important;
+    width: 50% !important;
 }
 
 .dropdown-event-type {
-  width: 28%;
+    width: 28%;
 }
 
 .form-date {
-  margin: 0;
-  width: 22%;
+    margin: 0;
+    width: 22%;
 }
 
 .dropdown-topic .el-select-dropdown {
-  min-width: unset !important;
+    min-width: unset !important;
 }
 
 .box-search {
-  width: 100%;
-  margin-right: 15px;
+    width: 100%;
+    margin-right: 15px;
 }
 
 .box-search-wrap {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
 }
 
 
 @media (min-width: 980px) {
-  .event-sort-box {
-    margin-left: 12.5%;
-    width: 75%;
-  }
+    .event-sort-box {
+        margin-left: 12.5%;
+        width: 75%;
+    }
 }
 
 /* #end region */

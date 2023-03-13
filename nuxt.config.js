@@ -5,6 +5,16 @@ export default {
     htmlAttrs: {
       lang: 'en',
     },
+    // script: [
+    //   {
+    //     text: 'text/javascript',
+    //     body: true,
+    //     evn: 'production',
+    //     id: 'ladizone-form-renderer',
+    //     innerHTML: `<h1>hello</h1>`
+    //   },
+    // ],
+    // __dangerouslyDisableSanitizers: ['script'],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -13,14 +23,12 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['element-ui/lib/theme-chalk/index.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['@/plugins/element-ui',
     '@/plugins/slugify',
-    '~/plugins/repositories.js'
   ],  
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -47,5 +55,9 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
+    extend(config, ctx) {
+      // Include the compiler version of Vue so that <component-name> works
+      config.resolve.alias["vue$"] = "vue/dist/vue.esm.js"
+  }
   },
 }

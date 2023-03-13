@@ -12,14 +12,26 @@ export const actions = {
         }
     },
 
-    async apiGetEvent() {
-        try {
-            let {data} = await this.$axios.get(`${resource}/getEventByID/`);
-            return data;
+    // async apiGetEvent() {
+    //     try {
+    //         // const id = this.$route.params.idz
+    //         let {data} = await this.$axios.get(`${resource}/getEventByID/`);
+    //         return data;
 
-        } catch (error) {
+    //     } catch (error) {   
+    //         console.log(error);
+    //         throw new TypeError(error);
+    //     }
+    // },
+
+    async apiGetAllEvent({state, commit}){
+        try{
+            let {data} = await this.$axios.get(`${resource}/GetAllEvent/`)
+            // console.log('data: ', data);
+            return data;
+        } catch (error){
             console.log(error);
-            throw new TypeError(error);
+            throw new TypeError(error)
         }
     }
 }

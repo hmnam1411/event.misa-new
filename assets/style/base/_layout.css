@@ -6,7 +6,7 @@ body {
     margin: 0 !important;
 }
 
-html{
+html {
     scroll-behavior: smooth;
 }
 
@@ -29,8 +29,9 @@ html{
 
 .col-md-24,
 .col-md-16,
+.col-md-13,
+.col-md-10,
 .col-md-7 {
-    float: left;
     position: relative;
     min-height: 1px;
 }
@@ -58,12 +59,28 @@ html{
         width: 100%;
     }
 
+    .col-md-13 {
+        width: 54.16666667%;
+    }
+
+    .col-md-offset-1 {
+        margin-left: 4.16666667%;
+    }
+
+    .col-md-10 {
+        width: 41.66666667%;
+    }
+
+    .col-md-13,
     .col-md-24,
     .col-md-16,
+    .col-md-10,
     .col-md-7 {
+        float: left;
         padding-left: 15px;
         padding-right: 15px;
     }
+
 
 }
 
@@ -74,10 +91,10 @@ html{
 }
 
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
     .section-temp {
         padding: 40px 0;
     }
-    
+
 
 }
