@@ -196,27 +196,44 @@ export default {
 
         handleTopic() {
             console.log('m ngu');
+
         },
 
         // 10/03/2023 HMNAM
-        // Filter search input when click button search
+        // Filter dropdown and search input when click button search
         handleSearch() {
-            // Topic dropdown filter
-            // console.log('handle select: ', this.topics.value);    
-            // this.eventUpcoming = this.originUpcoming.filter(function (el) {
-            //     console.log('el label', this.label);
-            //     return el.label == this.label;
-            // }, this);
-
-            // Input search
-            console.log('input: ', this.value);
-
-            if (this.value == '') {
+            if (this.value == '' && this.label == '') {
                 this.eventUpcoming = this.originUpcoming
                 this.eventFinish = this.originFinish
-                console.log('if: ', this.eventUpcoming);
-            } else {
+                // console.log('if: ', this.eventUpcoming);
+            } else if (this.label == '') {
                 this.eventUpcoming = this.originUpcoming.filter(item => {
+                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+                })
+
+                this.eventFinish = this.originFinish.filter(item => {
+                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+                })
+            } else {
+                // Topic dropdown filter
+                this.eventUpcoming = this.originUpcoming.filter(function (el) {
+                    console.log('value topic: ', this.label);
+
+                    // khi nào có data thay eventID = Topic
+                    return el.EventID == this.label;
+                }, this);
+
+                this.eventFinish = this.originFinish.filter(function (el) {
+                    console.log('value topic: ', this.label);
+
+                    // khi nào có data thay eventID = Topic
+                    return el.EventID == this.label;
+                }, this);
+
+                // Input search
+                console.log('input: ', this.value);
+
+                this.eventUpcoming = this.eventUpcoming.filter(item => {
                     return item.EventName.toLowerCase().includes(this.value.toLowerCase())
                 })
 
@@ -225,10 +242,9 @@ export default {
                 })
             }
 
-
         },
 
-        valueTopic(topics){
+        valueTopic(topics) {
             this.topics = topics
         },
 

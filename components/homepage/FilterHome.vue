@@ -8,8 +8,8 @@
           </h1>
           <div class="event-sort-box">
             <div class="box-sort">
-              <el-select @change="$emit('handle-topic')" class="dropdown-topic" v-model="selectedLabel" placeholder="Chủ đề">
-                <el-option class="dropdown-topic-item" v-for="item in topics" :key="item.value" :label="item.label"
+              <el-select @change="$emit('handle-topic', handleTopic())" class="dropdown-topic" v-model="selectedLabel" placeholder="Chủ đề">
+                <el-option class="dropdown-topic-item" v-for="item in topics" :key="item.label" :label="item.label"
                   :value="item.value">
                 </el-option>
               </el-select>
@@ -53,23 +53,23 @@
       return {
         topics: [
           {
-            value: 'Option1',
-            label: 'Chuyển đổi số',
+            value: '100',
+            label: '100',
           },
           {
-            value: 'Option2',
+            value: 'Quản trị Tài chính - Kế toán',
             label: 'Quản trị Tài chính - Kế toán',
           },
           {
-            value: 'Option3',
+            value: 'Quản trị Nhân sự',
             label: 'Quản trị Nhân sự',
           },
           {
-            value: 'Option4',
+            value: 'Quản lý Marketing & Bán hàng',
             label: 'Quản lý Marketing & Bán hàng',
           },
           {
-            value: 'Option5',
+            value: 'Quản trị & Vận hành',
             label: 'Quản trị & Vận hành',
           },
         ],
@@ -126,6 +126,10 @@
 
         // this.valueSearch = this.value
       },
+
+      handleTopic(){
+        console.log('gaf', this.selectedLabel);
+      }
     },
   
     mounted() {
