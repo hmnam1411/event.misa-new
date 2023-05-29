@@ -27,3 +27,27 @@
   width: 40px;
 }
 
+@media screen and (min-width: 980px) {
+  .el-carousel__arrow{
+    right: 50px;
+  }
+  
+}
+
+@media screen and (max-width: 767px) {
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 100%;
+  }
+  
+  .el-input--prefix .el-input__inner::placeholder{
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .el-carousel__arrow{
+    top: 74%;
+  }
+}
+
+

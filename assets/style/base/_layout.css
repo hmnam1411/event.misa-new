@@ -22,16 +22,14 @@ html {
     display: grid;
 }
 
-.row {
-    margin-left: -15px;
-    margin-right: -15px;
-}
-
 .col-md-24,
 .col-md-16,
+.col-md-14,
 .col-md-13,
 .col-md-10,
-.col-md-7 {
+.col-md-8,
+.col-md-7,
+.col-md-5 {
     position: relative;
     min-height: 1px;
 }
@@ -49,6 +47,18 @@ html {
 
     .col-md-16 {
         width: 66.66666667%;
+    }
+
+    .col-md-14 {
+        width: 58.33333333%;
+    }
+
+    .col-md-5 {
+        width: 20.83333333%;
+    }
+
+    .col-md-8 {
+        width: 33.33333333%;
     }
 
     .col-md-7 {
@@ -74,8 +84,11 @@ html {
     .col-md-13,
     .col-md-24,
     .col-md-16,
+    .col-md-14,
     .col-md-10,
-    .col-md-7 {
+    .col-md-8,
+    .col-md-7,
+    .col-md-5 {
         float: left;
         padding-left: 15px;
         padding-right: 15px;

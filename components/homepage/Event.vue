@@ -2,21 +2,7 @@
     <div>
         <Banner :getEvent="this.getEvent" />
 
-        <div class="cls-button-search">
-            <el-button @click="handleDropDown()" type="primary" icon="el-icon-search">Xem kết
-                quả</el-button>
-        </div>
-        <select name="category" id="category" v-model="selectedCategory">
-            <option v-for="(item, index) in itemCate" :key="index">
-                {{ item.name }}
-            </option>
-        </select>
-        <div v-for="(item, index) in categories" :key="index">
-            {{ item.name }}
-        </div>
-        <!-- <p>Selected Category: {{ selectedCategory }}</p> -->
-
-        <FilterHome @handle-topic="handleTopic" @value-topic="valueTopic" @select-label="updateLabel" :value="this.value"
+        <FilterHome @start-date="dateValue" @value-topic="valueTopic" @select-label="updateLabel" :value="this.value"
             :eventUpcoming="this.eventUpcoming" @value-search="updateValue" @handle-search="handleSearch" />
 
         <!-- upcoming -->
@@ -135,6 +121,7 @@ myaxios.interceptors.response.use(function (response) {
 })
 
 export default {
+
     components: {
         FilterHome,
         Banner
@@ -151,7 +138,7 @@ export default {
                 pageSize: 3, // muốn bao nhiêu item/ trang sửa số này là tự ăn
             },
 
-            startDate: '',
+            dateFilter: '',
             value: '',
             label: '',
             topics: '',
@@ -161,87 +148,70 @@ export default {
 
             originFinish: [],
 
-            itemCate: [],
-
-            categories: [
-                { id: 0, category_id: 0, name: "Small" },
-                { id: 1, category_id: 0, name: "Medium" },
-                { id: 2, category_id: 0, name: "Large" },
-                { id: 3, category_id: 1, name: "Blue" },
-                { id: 4, category_id: 1, name: "Green" },
-                { id: 5, category_id: 1, name: "Red" }
-            ],
-
-            selectedCategory: '',
         }
     },
 
     methods: {
-        ...mapActions('getevent', {
+        ...mapActions({
             apiGetAllEvent: 'apiGetAllEvent',
         }),
-
-        handleDropDown() {
-            console.log('handle select: ', this.selectedCategory);
-            // let testdrop = this.categories.filter(item => {
-            //     return item.category_id == this.selectedCategory;
-            // });
-
-            // this.categories = this.topics.filter(function (el) {
-            //     return el.id == this.selectedCategory;
-            // }, this);
-
-            console.log('itemCate: ', this.itemCate);
-        },
-
-        handleTopic() {
-            console.log('m ngu');
-
-        },
 
         // 10/03/2023 HMNAM
         // Filter dropdown and search input when click button search
         handleSearch() {
-            if (this.value == '' && this.label == '') {
-                this.eventUpcoming = this.originUpcoming
-                this.eventFinish = this.originFinish
-                // console.log('if: ', this.eventUpcoming);
-            } else if (this.label == '') {
-                this.eventUpcoming = this.originUpcoming.filter(item => {
-                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
-                })
 
-                this.eventFinish = this.originFinish.filter(item => {
-                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
-                })
-            } else {
-                // Topic dropdown filter
-                this.eventUpcoming = this.originUpcoming.filter(function (el) {
-                    console.log('value topic: ', this.label);
+            this.eventUpcoming = this.originUpcoming.filter(function (dt) {
+                // console.log('StartDate', dt.StartDate);
+                // console.log('dateFilter', this.dateFilter);
+                console.log('compare: this.dateFilter <= StartDate ', this.dateFilter <= dt.StartDate);
 
-                    // khi nào có data thay eventID = Topic
-                    return el.EventID == this.label;
-                }, this);
+                return dt.StartDate >= this.dateFilter;
+            }, this);
 
-                this.eventFinish = this.originFinish.filter(function (el) {
-                    console.log('value topic: ', this.label);
+            // if (this.value == '' && this.label == '') {
+            //     console.log('ngu 1');
+            //     this.eventUpcoming = this.originUpcoming
+            //     this.eventFinish = this.originFinish
+            //     // console.log('if: ', this.eventUpcoming);
+            // } else if (this.label == '') {
+            //     console.log('ngu 2');
+            //     this.eventUpcoming = this.originUpcoming.filter(item => {
+            //         return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+            //     })
 
-                    // khi nào có data thay eventID = Topic
-                    return el.EventID == this.label;
-                }, this);
+            //     this.eventFinish = this.originFinish.filter(item => {
+            //         return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+            //     })
+            // } else {
+            //     console.log('ngu vl');
 
-                // Input search
-                console.log('input: ', this.value);
+            //     // Topic dropdown filter
+            //     this.eventUpcoming = this.originUpcoming.filter(function (el) {
+            //         console.log('value topic: ', this.label);
+            //         // khi nào có data thay eventID = Topic
+            //         return el.EventID == this.label;
+            //     }, this);
 
-                this.eventUpcoming = this.eventUpcoming.filter(item => {
-                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
-                })
+            //     this.eventFinish = this.originFinish.filter(function (ep) {
+            //         // khi nào có data thay eventID = Topic
+            //         return ep.EventID == this.label;
+            //     }, this);
 
-                this.eventFinish = this.originFinish.filter(item => {
-                    return item.EventName.toLowerCase().includes(this.value.toLowerCase())
-                })
-            }
+            //     // Input search
+            //     console.log('input: ', this.value);
 
+            //     this.eventUpcoming = this.eventUpcoming.filter(item => {
+            //         return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+            //     })
+
+            //     this.eventFinish = this.eventFinish.filter(item => {
+            //         return item.EventName.toLowerCase().includes(this.value.toLowerCase())
+            //     })
+            // }
+        },
+
+        dateValue(date) {
+            this.dateFilter = date
         },
 
         valueTopic(topics) {
@@ -398,9 +368,6 @@ export default {
         this.getAllEvent();
         this.originUpcoming = this.eventUpcoming
         this.originFinish = this.eventFinish
-
-        this.itemCate = this.categories
-        // console.log('itemCate', this.itemCate);
     },
 }
 </script>
@@ -425,185 +392,6 @@ export default {
     margin-top: 30px;
 }
 
-.event-item-thumb {
-    width: 300px;
-    border-radius: 12px 0 0 12px;
-    overflow: hidden;
-    position: relative;
-}
-
-.event-item-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.event-item-topic {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    padding: 5px 15px;
-    border-radius: 25px;
-    overflow: hidden;
-    background: #fff;
-    font-size: 13px;
-    box-shadow: 0px 0 3px 0px #d8d8d8;
-    color: #212121;
-}
-
-.event-item-content {
-    width: -webkit-calc(100% - 500px);
-    display: flex;
-    flex-direction: column;
-    padding: 20px 25px;
-}
-
-.event-item-content-wrap a {
-    color: #212121;
-    text-decoration: none !important;
-}
-
-.event-item-name {
-    font-family: GoogleSans Bold, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.42857143;
-    margin: 0;
-    padding-bottom: 10px;
-    text-decoration: none !important;
-    cursor: pointer;
-}
-
-.event-item-sumary {
-    font-size: 15px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 4;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-}
-
-.cls-button-detail {
-    margin-top: auto;
-}
-
-.cls-button-detail a {
-    font-size: 14px;
-    color: #212121;
-    text-decoration: none !important;
-    background: url(~/static/images/home/ic_arrow-right.svg) no-repeat right top 3px;
-    background-size: 6px;
-    padding-right: 14px;
-}
-
-/* #region event item right */
-.event-item-info {
-    width: 200px;
-    padding: 20px;
-    border-left: dashed 2px #ccc;
-    display: flex;
-    flex-direction: column;
-}
-
-.event-item-time {
-    background: url(~/static/images/home/ic_time.svg) no-repeat;
-    background-size: 18px;
-    padding-left: 25px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-family: GoogleSans Medium, Arial, sans-serif;
-}
-
-.event-item-address {
-    background: url(~/static/images/home/ic_address.svg) no-repeat;
-    background-size: 18px;
-    padding-left: 25px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-family: GoogleSans Medium, Arial, sans-serif;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-}
-
-.event-item-slot {
-    background: url(~/static/images/home/ic_slot.svg) no-repeat;
-    background-size: 18px;
-    padding-left: 25px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-family: GoogleSans Medium, Arial, sans-serif;
-}
-
-.event-item-cost {
-    background: url(~/static/images/home/ic_cost.svg) no-repeat left top 2px;
-    background-size: 18px;
-    padding-left: 25px;
-    font-size: 16px;
-    font-family: GoogleSans Bold, Arial, sans-serif;
-}
-
-@keyframes blinkingBackground {
-    0% {
-        background-color: #363f92;
-    }
-
-    50% {
-        background-color: #04a1d5;
-    }
-
-    100% {
-        background-color: #363f92;
-    }
-}
-
-.cls-event-button .btn-register {
-    animation: blinkingBackground 1.2s infinite;
-}
-
-.cls-event-button a {
-    padding: 7px 20px;
-    color: #fff;
-    border-radius: 25px;
-    width: 100%;
-    text-align: center;
-    text-decoration: none !important;
-    font-size: 14px;
-    text-transform: uppercase;
-    cursor: pointer;
-    outline: none;
-    font-family: GoogleSans Medium, Arial, sans-serif;
-    margin-top: 8px;
-    position: relative;
-}
-
-.cls-event-button {
-    margin-top: auto;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-}
-
-/* #endregion */
-
-/* #endregion */
-
-/* #region finish */
-.event-group-title {
-    color: #000;
-}
-
-.event-item {
-    display: flex;
-    background: #fff;
-    height: 250px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0px 0 13px -7px #676767;
-    margin-top: 30px;
-}
 
 .event-item-thumb {
     width: 300px;
@@ -768,7 +556,7 @@ export default {
 
 /* #endregion */
 
-/* #end region */
+/* #endregion */
 
 /* region filter */
 .filter-home {
@@ -828,6 +616,44 @@ export default {
     .event-sort-box {
         margin-left: 12.5%;
         width: 75%;
+    }
+}
+
+
+@media screen and (max-width: 979px) {
+    .event-item-thumb {
+        display: none;
+    }
+
+    .event-item-content {
+        width: -webkit-calc(100% - 200px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .event-item{
+        display: block;
+        height: unset;
+    }
+
+    .event-item-content{
+        width: unset;
+    }
+
+    .event-item-info{
+        width: unset;
+        border-top: dashed 2px #ccc;
+        border-left: none;
+    }
+
+    .event-item-info-head{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        
+    }
+
+    .cls-button-detail{
+        padding-top: 20px ;
     }
 }
 

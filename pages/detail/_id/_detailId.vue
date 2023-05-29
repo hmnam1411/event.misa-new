@@ -258,7 +258,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* #region banner */
 
 .banner img {

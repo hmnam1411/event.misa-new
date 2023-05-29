@@ -233,7 +233,7 @@
         dataRegister: '',
       }
     },
-  
+
     async fetch() {
       const event = await fetch(
         `http://127.0.0.1:8001/getEventByID/${this.$route.params.id}/`
@@ -258,7 +258,7 @@
   }
   </script>
   
-  <style>
+  <style scoped>
   /* #region banner */
   
   .banner img {

@@ -5,16 +5,6 @@ export default {
     htmlAttrs: {
       lang: 'en',
     },
-    // script: [
-    //   {
-    //     text: 'text/javascript',
-    //     body: true,
-    //     evn: 'production',
-    //     id: 'ladizone-form-renderer',
-    //     innerHTML: `<h1>hello</h1>`
-    //   },
-    // ],
-    // __dangerouslyDisableSanitizers: ['script'],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -29,6 +19,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['@/plugins/element-ui',
     '@/plugins/slugify',
+    '~/plugins/vuex'
   ],  
 
   // Auto import components: https://go.nuxtjs.dev/config-components

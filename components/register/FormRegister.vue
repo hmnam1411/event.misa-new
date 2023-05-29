@@ -37,7 +37,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .reservations {
   background: url(~/static/images/register/bg-register.png) no-repeat center;
   background-size: cover;

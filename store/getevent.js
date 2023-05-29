@@ -1,6 +1,6 @@
 const resource = 'http://127.0.0.1:8001'
 
-export const actions = {
+const actions = {
     async apiBannerList() {
         try {
             let {data} = await this.$axios.get(`${resource}/getBannerList/`);
@@ -24,9 +24,20 @@ export const actions = {
     //     }
     // },
 
-    async apiGetAllEvent({state, commit}){
+    async apiGetAllEvent(){
         try{
             let {data} = await this.$axios.get(`${resource}/GetAllEvent/`)
+            // console.log('data: ', data);
+            return data;
+        } catch (error){
+            console.log(error);
+            throw new TypeError(error)
+        }
+    },
+
+    async apiInsertEvent(){
+        try{
+            let {data} = await this.$axios.get(`${resource}/InsertEvent/`)
             // console.log('data: ', data);
             return data;
         } catch (error){

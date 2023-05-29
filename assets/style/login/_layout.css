@@ -1,0 +1,27 @@
+body {
+    font-family: helvetica neue,Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+    margin: 0;
+
+}
+
+.container {
+    width: 100%;
+    padding: 0 15px;
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+
+@media(min-width:770px) {
+    .container {
+        width: 770px;
+        padding: 0 15px;
+    }
+}

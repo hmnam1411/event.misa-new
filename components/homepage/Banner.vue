@@ -2,32 +2,34 @@
     <div class="banner">
       <div class="container">
         <div class="row">
-          <el-carousel :interval="5000" arrow="always" height="500px">
-            <el-carousel-item class="banner-ctn" v-for="(item, index) in getEvent" :key="index">
-              <div class="banner-organizational-unit">CÔNG TY CP MISA</div>
-              <div class="banner-event-name">{{ item.EventName }}</div>
-              <div class="banner-event-info">
-                <div class="banner-event-time">{{ item.StartDate }}</div>
-                <div class="banner-event-address">
-                  {{ item.Address }}
+          <div class="banner-ctn">
+            <el-carousel :interval="5000" arrow="always" height="500px">
+              <el-carousel-item class="banner-item" v-for="(item, index) in getEvent" :key="index">
+                <div class="banner-organizational-unit">CÔNG TY CP MISA</div>
+                <div class="banner-event-name">{{ item.EventName }}</div>
+                <div class="banner-event-info">
+                  <div class="banner-event-time">{{ item.StartDate }}</div>
+                  <div class="banner-event-address">
+                    {{ item.Address }}
+                  </div>
+                  <div class="banner-event-slot">{{item.Slot}}</div>
                 </div>
-                <div class="banner-event-slot">{{item.Slot}}</div>
-              </div>
-              <ul class="event-slide">
-                <li>
-                  <a :href="buildUrl(item)" id="Chitiet_Event" class="s-event-item">
-                    <div class="s-event-date">
-                      <div class="s-event-month">Tháng 2</div>
-                      <div class="s-event-day">21</div>
-                    </div>
-                    <div class="s-event-name">
-                      {{ item.EventName }}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </el-carousel-item>
-          </el-carousel>
+                <ul class="event-slide">
+                  <li>
+                    <a :href="buildUrl(item)" id="Chitiet_Event" class="s-event-item">
+                      <div class="s-event-date">
+                        <div class="s-event-month">Tháng 2</div>
+                        <div class="s-event-day">21</div>
+                      </div>
+                      <div class="s-event-name">
+                        {{ item.EventName }}
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
         </div>
       </div>
     </div>
@@ -188,7 +190,7 @@
     -webkit-box-orient: vertical;
   }
   
-  .banner-ctn {
+  .banner-item {
     margin-left: 12.5%;
   }
   
@@ -204,6 +206,35 @@
   }
   
   /* #endregion */
+
+  @media screen and (max-width:767px) {
+    .banner-item{
+      margin-left: 0;
+    }
+
+    .banner-event-name{
+      max-width: unset;
+    }
+
+    .banner-ctn{
+      text-align: center;
+    }
+
+    .banner-event-info{
+      justify-content: center;
+    }
+
+    ul.event-slide{
+      padding: 0;
+      justify-content: center;
+    }
+
+    ul.event-slide li{
+      width: 70%;
+    }
+  }
+
+  
   </style>
   
   
