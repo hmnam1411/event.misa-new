@@ -4,9 +4,35 @@
 }
 
 *{
-    font-family: GoogleSans Bold, Arial, sans-serif;
+    font-family: GoogleSans, Arial, sans-serif;
 }
 
 a:-webkit-any-link{
     text-decoration: none !important;
+}
+
+.text-bold{
+    font-family: GoogleSans Bold, Arial, sans-serif;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.common-title {
+    font-family: GoogleSans Bold, Arial, sans-serif;
+    font-size: 28px;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 30px;
+}
+
+@media screen and (max-width: 767px){
+    .common-title {
+        font-size: 24px;
+    }
+}
+
+a {
+    text-decoration: none;
 }
